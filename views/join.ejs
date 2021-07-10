@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma-rtl.min.css">
+
+    <!-- 제이쿼리 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <title>글 작성</title>
+    <style>
+        .yeaji {
+            text-align: center;
+            margin: auto;
+            width: 400px;
+            /* margin-top: 200px; */
+            display: block;
+            margin-top: 30px;
+        }
+        .post {
+            text-align: center;
+            margin-top: 30px;
+            cursor: pointer;
+                transition: transform 300ms ease;
+        }
+        .post:hover {
+                transform: scale(1.1);
+        }
+        .hero-body {
+                text-align: center;
+        }
+        .desc {
+            margin-top: 20px;
+        }
+    </style>
+
+
+    <script>
+
+        if (localStorage.getItem("token")) {
+            
+            alert("이미 로그인이 되어있습니다. 메인 페이지로 이동합니다.");
+            window.location.replace("/");
+        }
+
+        // 회원가입 함수!
+        function join() {
+            $.ajax({
+                type: "POST",
+                url: "api/add-user",
+                data: {
+                    nickname:$('#nickname').val(),
+                    password:$('#password').val(),
+                    passwordConfirm:$('#passwordConfirm').val(),
+                },
+                // success: function (response) {
+                //     if (response["result"] == "success") {
+                //         alert("회원가입 완료!")
+                //     }else {
+                //         alert(response["result"])
+                //     }
+                //     window.location.href = '/login'
+                // }
+                
+                success: function (response) {
+                    alert("어서와!");
+                    // window.location.replace("/login");
+                    window.location.href = '/login'
+                    
+                },
+                error: function (error) {
+                    alert(error.responseJSON.errorMessage);
+                    window.location.reload()
+                },
+
+            })
+            // window.location.replace("/login");
+                    // window.location.href = '/login'
+        }
+
+        // customAlert
+    //     function customAlert(text, confirmCallback) {
+    //     $("#alertText").text(text);
+    //     $("#alertModal").modal("show");
+    //     if (confirmCallback) {
+    //       $("#alertModal .btn-confirm").click(confirmCallback);
+    //     }
+    //   }
+
+    </script>
+</head>
+<body>
+    <section class="hero is-primary">
+        <div class="hero-body">
+          <p class="title">
+            <a href="/">블로그</a>
+          </p>
+          <p class="subtitle">
+            회원가입
+          </p>
+        </div>
+      </section>
+
+      <div class="yeaji">
+        <!-- <input class="input is-primary" type="text" placeholder="Primary input"> -->
+        <input id="nickname" class="input is-primary desc" type="text" placeholder="닉네임">
+        <input id="password" class="input is-primary desc" type="password" placeholder="비밀번호">
+        <input id="passwordConfirm" class="input is-primary desc" type="password" placeholder="비밀번호 확인">
+      </div>
+      <div class="post">
+        <button onclick="join()" class="button is-primary">회원가입!</button>
+    </div>
+
+</body>
+</html>

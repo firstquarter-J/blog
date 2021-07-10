@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma-rtl.min.css">
+
+    <!-- 제이쿼리 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+
+    <title>글 수정</title>
+    <style>
+        .yeaji {
+            text-align: center;
+            margin: auto;
+            width: 400px;
+            /* margin-top: 200px; */
+            display: block;
+            margin-top: 30px;
+        }
+        .post {
+            text-align: center;
+            margin-top: 30px;
+            cursor: pointer;
+                transition: transform 300ms ease;
+        }
+        .post:hover {
+                transform: scale(1.1);
+        }
+        .hero-body {
+                text-align: center;
+        }
+        .desc {
+            margin-top: 20px;
+        }
+    </style>
+
+    <!-- <script src="/get-self.js"></script> -->
+    <script>
+
+        // let user;
+        $(document).ready(function () {
+                getPost()
+
+                // getSelf(function (u) {
+                //     user = u
+                //     console.log(user)
+                // })
+            })
+            // postId 로 지목된 db의 post 가져와서 폼에 뿌려줌
+        function getPost() {
+                // $("#postlist").empty()
+                // console.log(category)
+
+                // url로 쿼리 값 보내서 받아와? 뭘 쓰는진 알고 쓰니?
+                // 이제 안다!!! 주소에 저장 해 둔 postId값 가져와서 특정화 시킨다!!!
+                let searchParams = new URLSearchParams(window.location.search)
+                let postId = searchParams.get('postId')
+                
+                $.ajax({
+                    type: "GET",
+                    url: `/api/find-one-post?postId=${postId}`,
+                    data: {},
+                    success: function (response) {
+                        let post = response["post"]
+                        // console.log(post)
+                        
+                        let author = post['author']
+                        let password = post['password']
+                        let title = post['title']
+                        let description = post['description']
+                        
+                        $('#author').val(author)
+                        $('#title').val(title)
+                        $('#description').val(description)
+                    }
+                })
+            }
+
+            // 수정 함수
+            function modifyPost() {
+                                // url로 쿼리 값 보내서 받아와? 뭘 쓰는진 알고 쓰니?
+                // 이제 안다!!! 주소에 저장 해 둔 postId값 가져와서 특정화 시킨다!!!
+                let searchParams = new URLSearchParams(window.location.search)
+                let postId = searchParams.get('postId')
+                
+                $.ajax({
+                    type: "POST",
+                    url: `/api/update-post?postId=${postId}`, // modify 와 update. 무엇이 더 적절한 이름일까?
+                    data: {
+                        title:$('#title').val(),
+                        description:$('#description').val(),
+                        // password:$('#password').val(),
+                        // nickname: user.nickname,
+                        
+                    },
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                    success: function (response) {
+                        if (response["result"] == "success") {
+                            alert("수정 완료!")
+                        } else {
+                            alert(response["result"])
+                        }
+                        window.location.href = '/'
+                    }
+                })
+            }
+
+            // 삭제 함수
+            function deletePost() { // 자고 일어나서 다시 본다
+                // url로 쿼리 값 보내서 받아와? 뭘 쓰는진 알고 쓰니?
+                let searchParams = new URLSearchParams(window.location.search)
+                let postId = searchParams.get('postId')
+
+                $.ajax({
+                    type: "DELETE",
+                    url: `api/delete-post/${postId}`, // api/detail/:postId ${postId}
+                    data: {
+                        password: $('#password').val(),
+                    },
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                    success: function(response) {
+                        if (response["result"] == "success") {
+                            alert('삭제완료!')
+                        } else {
+                            alert("당신에게는 권한이 없습니다!클라이언트")
+                        }
+                        window.location.href = '/' // 실행 순서 제대로 기억하고 써라 // 동기 & 비동기 구분
+                        // window.location.reload()
+                    }
+                })
+            }
+
+
+    </script>
+</head>
+<body>
+    <section class="hero is-primary">
+        <div class="hero-body">
+          <p class="title">
+            <a href="/">블로그</a>
+          </p>
+          <p class="subtitle">
+            글 수정, 삭제
+          </p>
+        </div>
+      </section>
+
+      <div class="yeaji">
+        <!-- <input id="author" class="input is-primary desc" type="text" placeholder="이름"> -->
+        <!-- <input id="password" class="input is-primary desc" type="text" placeholder="비밀번호"> -->
+        <input id="title" class="input is-primary desc" type="text" placeholder="제목">
+        <textarea id="description" class="textarea desc" placeholder="내용" rows="10"></textarea>
+      </div>
+    <div class="post">
+        <button onclick="modifyPost()" class="button is-primary">수정하기</button>
+    </div>
+    <div class="post">
+        <button onclick="deletePost()" class="button is-primary">삭제하기</button>
+    </div>
+    
+
+</body>
+</html>

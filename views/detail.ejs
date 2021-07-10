@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <!-- Webpage Title -->
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma-rtl.min.css">
+
+    <title>첫 화면</title>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+
+    <!-- 구글폰트 -->
+    <!-- <link href="https://fonts.googleapis.com/css?family=Do+Hyeon&display=swap" rel="stylesheet"> -->
+    <style>
+        @import url(http://fonts.googleapis.com/css?family=Calibri:400,300,700);
+
+
+        .mt-100 {
+            margin-top: 100px
+        }
+
+        .mb-100 {
+            margin-bottom: 100px
+        }
+
+        .card {
+            position: relative;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+            flex-direction: column;
+            min-width: 0;
+            word-wrap: break-word;
+            background-color: #fff;
+            background-clip: border-box;
+            border: 0px solid transparent;
+            border-radius: 0px
+        }
+
+        .card-body {
+            -webkit-box-flex: 1;
+            -ms-flex: 1 1 auto;
+            flex: 1 1 auto;
+            padding: 1.25rem
+        }
+
+        .card .card-title {
+            position: relative;
+            font-weight: 600;
+            margin-bottom: 10px
+        }
+
+        .comment-widgets {
+            position: relative;
+            margin-bottom: 10px
+        }
+
+        .comment-widgets .comment-row {
+            border-bottom: 1px solid transparent;
+            padding: 14px;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            margin: 10px 0
+        }
+
+        .p-2 {
+            padding: 0.5rem !important
+        }
+
+        .comment-text {
+            padding-left: 15px
+        }
+
+        .w-100 {
+            width: 100% !important
+        }
+
+        .m-b-15 {
+            margin-bottom: 15px
+        }
+
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.76563rem;
+            line-height: 1.5;
+            border-radius: 1px
+        }
+
+        .btn-cyan {
+            color: #fff;
+            background-color: #27a9e3;
+            border-color: #27a9e3
+        }
+
+        .btn-cyan:hover {
+            color: #fff;
+            background-color: #1a93ca;
+            border-color: #198bbe
+        }
+
+        .comment-widgets .comment-row:hover {
+            background: rgba(0, 0, 0, 0.05)
+        }
+    </style>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            getPost()
+            loadComment()
+            
+        })
+
+
+
+        // ${category ? "?category=" + category : ""}
+        function getPost() {
+            $("#postlist").empty()
+
+            // url로 쿼리 값 보내서 받아와? 뭘 쓰는진 알고 쓰니?
+            // 이제 안다!!! 주소에 저장 해 둔 postId값 가져와서 특정화 시킨다!!!
+            let searchParams = new URLSearchParams(window.location.search)
+            let postId = searchParams.get('postId')
+
+            $.ajax({
+                type: "GET",
+                url: `/api/find-one-post?postId=${postId}`, // detail
+                data: {},
+                success: function (response) {
+                    let post = response["post"]
+                    make_post_card(post)
+                }
+            })
+        }
+        //  ${item["description"]}
+        // <tr onclick="window.location='/detail?postId=${item['postId']}';">
+        //                     <a href="/detail"><td scope="col">${item["title"]}</td></a>
+        //                     <td scope="col">${item["author"]}</td>
+        //                     <td scope="col">${item["date"]}</td>
+        //                 </tr>
+        function make_post_card(item) {
+            let htmlTemp = `
+                <div class="card">
+                        <div class="card-header">
+                            ${item["title"]}&nbsp; —— &nbsp;
+                            <cite>${item["author"]}</cite>
+                        </div>
+                        <div class="card-body">
+                          <blockquote class="blockquote mb-0">
+                            <p>${item["description"]}</p>
+                            <footer class="blockquote-footer">${item["date"]}</footer>
+                          </blockquote>
+                        </div>
+                      </div>
+                      
+                    </div>
+                </div>
+
+</div>
+                                `
+            $("#postlist").append(htmlTemp)
+        }
+        
+        function saveComment() {
+
+        // url로 쿼리 값 보내서 받아와? 뭘 쓰는진 알고 쓰니?
+        // 이제 안다!!! 주소에 저장 해 둔 postId값 가져와서 특정화 시킨다!!!
+            let searchParams = new URLSearchParams(window.location.search)
+            let postId = searchParams.get('postId')
+
+            if ($('#description').val().length === 0) { // 어디서 뭘 가져올거고 가져 갈건지 명확하게 생각해서 써라
+                alert("댓글 내용을 입력해 주세요")
+                window.location.reload()
+            } else {
+                $.ajax({
+                type: "POST",
+                url: "api/save-comment",
+                data: {
+                    postId,
+                    description:$('#description').val(),
+                },
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+                success: function (response) {
+                    if (response["result"] == "success") {
+                        alert("댓글 작성 완료!")
+                    }
+                    // window.location.href = `/detail?postId=${postId}` // 두가지 방법을 쓸 수 있다아~
+                    window.location.reload()
+                }
+            })
+            }
+
+
+        }
+
+        function loadComment(){
+
+                        // url로 쿼리 값 보내서 받아와? 뭘 쓰는진 알고 쓰니?
+            // 이제 안다!!! 주소에 저장 해 둔 postId값 가져와서 특정화 시킨다!!!
+            let searchParams = new URLSearchParams(window.location.search)
+            let postId = searchParams.get('postId')
+
+            $.ajax({
+                type: "GET",
+                url: `/api/load-comment`,
+                dataType:'json',
+                data: { postId },
+                success: function (response) {
+                    let comment = response["comment"]
+                    // console.log(comment) // 함 찍어 봤다
+                    for ( let i = 0; i < comment.length; i++ ) {
+
+                        let author = comment[i]['author']
+                        let description = comment[i]['description']
+                        let date = comment[i]['date']
+                        let commentId=comment[i]['commentId']
+
+                        let temp_html=`
+                            <div class="d-flex flex-row comment-row m-t-0">
+                                <div class="p-2"><img src="https://i.imgur.com/Ur43esv.jpg" alt="user" width="50"
+                                        class="rounded-circle"></div>
+                                <div class="comment-text w-100">
+                                    <h6 class="font-medium">${author}</h6> 
+                                    <span id="desc${commentId}" class="m-b-15 d-block">${description}</span>
+                                    <div class="comment-footer"> <span class="text-muted float-right">${date}</span>
+                                        <button onclick="modifyComment(${commentId})" id="btn-modify${commentId}" type="button" class="btn btn-cyan btn-sm">수정버튼</button>
+                                        <button onclick="deleteComment(${commentId})" id="btn-delete" type="button" class="btn btn-danger btn-sm">삭제버튼</button> </div>
+                                </div>
+                            </div> <!-- Comment Row -->`
+                                            // desc${commentId}
+                        $('#commentList').append(temp_html)
+                    }
+                }
+            })
+        }
+
+        function deleteComment(commentId) {
+            // 전달받은 코멘트아이디로 특정해서 삭제
+            // 한번 더 고민
+            if(confirm("정말로 삭제하시겠습니까?") == true) { 
+                $.ajax({
+                type: "DELETE",
+                url: `api/delete-comment`,
+                data: { commentId },
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+                success: function(response) {
+                    if (response["result"] == "success") {
+                        alert('삭제완료!')
+                    } else {
+                        alert("당신에게는 권한이 없습니다!")
+                    }
+
+                    // window.location.href = '/' // 실행 순서 제대로 기억하고 써라 // 동기 & 비동기 구분
+                    window.location.reload()
+                }
+            })
+                    
+                }
+                else{
+                    return ;
+                }
+
+
+
+
+        }
+
+        function modifyComment(commentId) {
+
+            if ($('#btn-modify'+commentId).text() === '수정완료') {
+
+                $.ajax({
+                    type: "PATCH",
+                    url: `api/update-comment`,
+                    data: { 
+                        commentId, 
+                        description: $('#newDesc').val(),
+                    },
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                    success: function (response) {
+                        console.log(response)
+                        if (response["result"] == "success") {
+                            alert("수정 완료!")
+                        } else {
+                            alert(response["result"]) // 이렇게 처리하는게 베스트
+                        }
+                        window.location.reload()
+                    }
+                    
+                })
+            }
+
+            let baseComment = $('#desc'+commentId).text() // val 이 안되면 text 든 뭐든 다 써 봐 징징대지 말고
+
+            $('#desc'+commentId).empty()
+            $("#desc"+commentId).append(`<textarea id="newDesc">${baseComment}</textarea>`);
+            // 안 와 닿음
+            $('#btn-modify'+commentId).empty()
+            $('#btn-modify'+commentId).append(`수정완료`)
+
+            // console.log($('#btn-modify').text())
+            
+            
+        }
+
+
+        function makePost() {
+            // 버튼 눌렀을때 new 페이지로 이동... 어떻게?
+            window.location.href = '/new'
+
+        }
+
+        function modifyPost() {
+            let searchParams = new URLSearchParams(window.location.search)
+            let postId = searchParams.get('postId')
+
+            window.location.href = `/modify?postId=${postId}` // 리다이랙트
+        }
+
+        function alarm() {
+            if (localStorage.getItem("token")===null) {
+                alert("로그인이 필요한 기능입니다")
+                window.location.href = 'login'
+            }
+        }
+
+    </script>
+
+    <style type="text/css">
+        * {
+            font-family: "Do Hyeon", sans-serif;
+        }
+
+        h1,
+        h5 {
+            display: inline;
+        }
+
+        .info {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .post {
+            margin-top: 100px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 300ms ease;
+
+        }
+
+        .post:hover {
+            transform: scale(1.1);
+        }
+
+        .reviews {
+            margin-top: 100px;
+        }
+
+        .container {
+            width: 600px;
+            text-align: center;
+        }
+
+        .hero-body {
+            text-align: center;
+        }
+
+        .desc {
+            width: 800px;
+            /* text-align: center; */
+            margin: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="hero is-primary">
+        <div class="hero-body">
+            <p class="title">
+                <a href="/">블로그</a>
+            </p>
+            <p class="subtitle">
+                글 상세 보기
+            </p>
+        </div>
+    </section>
+
+    <div class="post">
+        <button onclick="modifyPost()" class="button is-primary">수정</button>
+        <!-- <button onclick="deletePost()" class="button is-primary">삭제</button> -->
+    </div>
+
+    <div class="container">
+        <div id="postlist" class="reviews">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">제목</th>
+                        <th scope="col">작성자</th>
+                        <th scope="col">작성일시</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+
+                <div class="card">
+                    <div class="card-header">
+                        내용
+                    </div>
+                    <div class="card-body">
+                        <blockquote class="blockquote mb-0">
+                            <p>내용입력</p>
+                            <footer class="blockquote-footer">뭘<cite title="Source Title">넣을까?</cite></footer>
+                        </blockquote>
+                    </div>
+                </div>
+
+            </table>
+
+        </div>
+
+        <div class="form-group">
+            <label for="exampleFormControlTextarea1">코멘트 입력</label>
+            <textarea onclick=alarm() class="form-control" id="description" rows="3"></textarea>
+        </div>
+
+        <button onclick="saveComment()" class="button is-primary">댓글 작성</button>
+
+        <div class="row d-flex justify-content-center mt-100 mb-100">
+            <div class="">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h4 class="card-title">Latest Comments</h4>
+                    </div>
+                    <div class="comment-widgets" id="commentList">
+                        <!-- Comment Row -->
+                        
+                       
+                    </div> <!-- Card -->
+                </div>
+            </div>
+        </div>
+
+</body>
+
+</html>

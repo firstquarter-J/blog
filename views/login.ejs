@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma-rtl.min.css">
+
+    <!-- 제이쿼리 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <title>로그인</title>
+    <style>
+        .yeaji {
+            text-align: center;
+            margin: auto;
+            width: 400px;
+            /* margin-top: 200px; */
+            display: block;
+            margin-top: 30px;
+        }
+        .post {
+            text-align: center;
+            margin-top: 30px;
+            cursor: pointer;
+                transition: transform 300ms ease;
+        }
+        .post:hover {
+                transform: scale(1.1);
+        }
+        .hero-body {
+                text-align: center;
+        }
+        .desc {
+            margin-top: 20px;
+        }
+    </style>
+
+    <script>
+
+        if (localStorage.getItem("token")) {
+
+            alert("이미 로그인이 되어있습니다. 메인 페이지로 이동합니다");
+            window.location.replace("/");
+        }
+        
+        function login() {
+            $.ajax({
+                type: "POST",
+                url: "api/login-user",
+                data: {
+                    nickname:$('#nickname').val(),
+                    password:$('#password').val(),
+                },
+                success: function (response) {
+                    localStorage.setItem("token", response.token)
+                    alert("로그인 완료!")
+                    // if (response["result"] == "success") {
+                    //     alert("로그인 완료!")
+                    // }
+                    window.location.replace("/")
+                },
+                error: function (error) {
+                    alert(error.responseJSON.errorMessage)
+                }
+            })
+        }
+    </script>
+</head>
+<body>
+    <section class="hero is-primary">
+        <div class="hero-body">
+          <p class="title">
+            <a href="/">로그인</a>
+          </p>
+          <p class="subtitle">
+            어서와
+          </p>
+        </div>
+      </section>
+
+      <div class="yeaji">
+        
+        <!-- <input class="input is-primary" type="text" placeholder="Primary input"> -->
+        <input id="nickname" class="input is-primary desc" type="text" placeholder="닉네임">
+        <input id="password" class="input is-primary desc" type="text" placeholder="비밀번호">
+      </div>
+      <div class="post">
+        <button onclick="login()" class="button is-primary">로그인</button>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+    <head>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma-rtl.min.css">
+        
+        <title>첫 화면</title>
+
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+              integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+              crossorigin="anonymous">
+
+        <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+
+        <script>
+            $(document).ready(function () {
+                
+                loadPost()
+            
+            })
+
+            // 포스트 가져오기 api : load-post
+            function loadPost() {
+                // $("#postlist").empty()
+                $.ajax({
+                    type: "GET",
+                    url: `/api/load-post`,
+                    data: {},
+                    success: function (response) {
+                        let post = response["post"]
+                        console.log(post)
+                        for ( let i = 0; i < post.length; i++ ) {
+                            makeCard(post[i])
+                        }
+                    }
+                })
+            }
+
+            function makeCard(post) {
+                                                            //findeOne-post
+                let htmlTemp = `<tr onclick="window.location='detail?postId=${post['postId']}';">
+                                    <a href="/detail"><td scope="col">${post["title"]}</td></a>
+                                    <td scope="col">${post["author"]}</td>
+                                    <td scope="col">${post["date"]}</td>
+                                </tr>`
+                $("#postlist").append(htmlTemp)
+            }
+
+            function makePost() {
+                // 버튼 눌렀을때 new 페이지로 이동... 어떻게?
+                window.location.href = '/new'
+            }
+
+            function join() {
+                window.location.href = '/join'
+            }
+
+            function login() {
+                window.location.href = '/login'
+            }
+
+            function logout() {
+                localStorage.clear();
+                window.location.href = "/";
+            }
+
+        </script>
+
+        <style type="text/css">
+            * {
+                font-family: "Do Hyeon", sans-serif;
+            }
+
+            h1,
+            h5 {
+                display: inline;
+            }
+
+            .info {
+                margin-top: 20px;
+                margin-bottom: 20px;
+            }
+
+            .post {
+                margin-top: 20px;
+                text-align: center;
+                cursor: pointer;
+                transition: transform 300ms ease;
+                
+            }
+            .post:hover {
+                transform: scale(1.1);
+            }
+
+            .reviews {
+                margin-top: 100px;
+            }
+            .container {
+                width: 600px;
+                text-align: center;
+            }
+            .hero-body {
+                text-align: center;
+            }
+            .join-box {
+                text-align: center;
+                /* display: inline; */
+            }
+        </style>
+    </head>
+
+    <body>
+        <section class="hero is-primary">
+            <div class="hero-body">
+                <p class="title">
+                    <a href="/">950113</a>
+                </p>
+                <p class="subtitle">
+                    너 없었으면 어떻게 코딩 하니
+                </p>
+            </div>
+            </section>
+            <div class="join-box">
+                <div class="">
+                    <button onclick="join()" class="button is-primary">회원가입</button>
+                </div>
+                <div class="">
+                    <button onclick="login()" class="button is-primary">로그인</button>
+                </div>
+                <div class="">
+                    <button onclick="logout()" class="button is-primary">로그아웃</button>
+                </div>
+            </div>
+
+            <div class="post">
+                <button onclick="makePost()" class="button is-primary">글 작성하기</button>
+            </div>
+
+        <div class="container">
+            <div class="reviews">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">제목</th>
+                        <th scope="col">작성자</th>
+                        <th scope="col">날짜</th>
+                    </tr>
+                    </thead>
+                    <tbody id="postlist">
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+
+</html>
