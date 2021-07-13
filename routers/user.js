@@ -12,7 +12,7 @@ const User = require("../schemas/user")
 const Joi = require("joi")
 
 // 조이 스키마 정의. 올바른 스키마인지 검증
-const postUsersSchema = Joi.object({ 
+const postUsersSchema = Joi.object({
     nickname: Joi.string()
         .alphanum()
         .min(3)
@@ -25,7 +25,7 @@ const postUsersSchema = Joi.object({
     passwordConfirm: Joi.string().required(), // 문자열.필수
 })
 
-router.post('/add-user', async (req, res) => { // post
+router.post('/register', async (req, res) => { // post
     try {
         const recentUser = await User.find().sort("-userId").limit(1) // 최근 저장값 순차정렬
         let userId = 1                              // ㅋㅋㅋ 정렬 안 하고 2로 계속 저장을 하냐!?
@@ -64,7 +64,7 @@ const postAuthSchema = Joi.object({
     nickname: Joi.string().required(), // 문자열.필수값
     password: Joi.string().required(),
   })
-router.post('/login-user', async (req, res) => {
+router.post('/login', async (req, res) => {
     // try {
         const { nickname, password } = await postAuthSchema.validateAsync(req.body) //받은 body를 변수로 하나씩 넣어준다.
 

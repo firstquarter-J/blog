@@ -4,11 +4,12 @@ const router = express.Router() //라우터라고 선언한다.
 
 const url = require('url')
 const Post = require("../schemas/post")
+const Comment = require("../schemas/comment")
 const authMiddleware = require("../middlewares/auth-middleware")
 
 
 // 첫 화면. db에 저장된 글 가져와서 클라이언트에 보내줌
-router.get("/load-post", async (req, res, next) => { // post
+router.get("/post", async (req, res, next) => { // post
     try {
       const post = await Post.find({}).sort("-postId") //검색할 카테고리를 포함한 post를 postId 역정렬(마이너스)
       res.json({ post: post }) //결과를 json에 담는다
@@ -23,29 +24,30 @@ router.get("/load-post", async (req, res, next) => { // post
 // 프로그램 안의 작은 프로그램
 
 // 입력한 데이터 db에 저장
-router.post('/save-post', async (req, res) => { // post
+router.post('/post', async (req, res) => { // post
     const recentPost = await Post.find().sort("-postId").limit(1) // 최근 포스트 찾아서 정렬
-    let postId = 1 // 
+    let postId = 1
     if(recentPost.length != 0){ // 최근 포스트가 있으면
       postId = recentPost[0]['postId'] + 1 // 새 배열 생성해서 1번부터 번호 부여
     }
     console.log(req.body)//저장할 아이템들을 body로 받아오므로, body를 한번 찍어봤다.
+    console.log(postId)
     const { title, description, author } = req.body //받은 body를 변수로 하나씩 넣어준다.
-
-    
 
     const date = ( new Date().format("yyyy-MM-dd a/p hh:mm:ss"))
     await Post.create({ postId, title, description, date, author }) //만들어서 집어넣는다.
     res.send({ result: "success" }) //잘했다고 칭찬해준다.ㅋㅋㅋㅋㅋㅋㅋㅋ
   })
-  
 
 
 
-// 글 하나만 찾아오는 api : findeOne_post
-router.get("/find-one-post", async (req, res, next) => { // modify
+// 글 하나만 찾아오는 api : find-one-post
+router.get("/post/:postId", async (req, res, next) => {
   try {
-    const { postId } = req.query;// query string으로 받아온다
+
+    const { postId } = req.params;// query string으로 받아온다
+    // console.log("----------------널이자식")
+    // console.log(postId)
     const post = await Post.findOne({ postId })
     res.json({ post: post }) //결과를 json에 담는다
   } catch (err) {
@@ -54,11 +56,12 @@ router.get("/find-one-post", async (req, res, next) => { // modify
   }
 })
 
+
 // 수정 페이지 modify 에서 업데이트
-router.post('/update-post', authMiddleware, async (req, res) => { // modify
+router.put('/post/:postId', authMiddleware, async (req, res) => { // modify
 
   const { user } = res.locals
-  const { postId } = req.query //카테고리를 query string으로 받아온다
+  const { postId } = req.params //카테고리를 query string으로 받아온다
   const { title, description } = req.body //받은 body를 변수로 하나씩 넣어준다.
   const tokenNickname = user["nickname"] // 토큰 닉네임
   // console.log(u) // 토큰 닉네임
@@ -76,17 +79,21 @@ router.post('/update-post', authMiddleware, async (req, res) => { // modify
 })
 
 // post 삭제 - 수정 페이지에서
-router.delete("/delete-post/:postId", authMiddleware, async (req, res) => { // /modify/:postId
-
+router.delete("/post/:postId", authMiddleware, async (req, res) => { // /modify/:postId
+  
   const { user } = res.locals
   const { postId } = req.params
   const tokenNickname = user["nickname"] // 토큰 닉네임
   const p = await Post.findOne({ postId }) // js의 위력. 선언하지 않고도 쓴다
   const dbNickname = p["author"] // 디비 닉네임
 
+  const commentDelete = await Comment.find({ postId })
+  console.log(postId)
+  console.log(commentDelete)
 
   if ( tokenNickname == dbNickname ) {
     await Post.deleteOne({ postId })
+    await Comment.deleteMany({ postId })
     res.send({ result: "success" }) //잘했다고 칭찬해준다.ㅋㅋㅋㅋㅋㅋㅋㅋ
   } 
   else {

@@ -49,8 +49,9 @@ app.get('/new', (req, res) => {
 
   // 3. 게시글 조회 페이지
   //     - 제목, 작성자명, 작성 날짜, 작성 내용을 조회하기
-app.get('/detail', (req, res) => { // localhost:5000/detail?goodsId=10의 형식으로 사용, id를 가져온다
-    let id = req.query.postId
+app.get('/detail/:postId', (req, res) => { // localhost:5000/detail?goodsId=10의 형식으로 사용, id를 가져온다
+    // let id = req.query.postId
+    let id = req.params.postId
     res.render('detail', {id}) // 
 })
 
@@ -60,8 +61,8 @@ app.get('/detail', (req, res) => { // localhost:5000/detail?goodsId=10의 형식
   //     - "글쓰기" 버튼은 없고 "수정 완료", "삭제하기" 버튼만 만들기
   //     - "수정완료" 버튼을 누를 때 입력된 비밀번호를 비교하여 동일할 때만 글이 수정되게 하기
   //     - "삭제하기" 버튼을 누를 때 입력된 비밀번호를 비교하여 동일할 때만 글이 삭제되게 하기
-app.get('/modify', (req, res) => {
-    let id = req.query.postId
+app.get('/modify/:postId', (req, res) => {
+    let id = req.params.postId
     res.render('modify', {id}) // 
 })
 

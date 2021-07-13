@@ -54,7 +54,7 @@
         function makePost() {
             $.ajax({
                 type: "POST",
-                url: "api/save-post",
+                url: "/api/post",
                 data: {
                     title:$('#title').val(),
                     description:$('#description').val(),

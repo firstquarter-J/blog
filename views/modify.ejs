@@ -41,6 +41,9 @@
     <!-- <script src="/get-self.js"></script> -->
     <script>
 
+        let postId = "<%= id %>"
+        console.log(postId)
+
         // let user;
         $(document).ready(function () {
                 getPost()
@@ -57,12 +60,15 @@
 
                 // url로 쿼리 값 보내서 받아와? 뭘 쓰는진 알고 쓰니?
                 // 이제 안다!!! 주소에 저장 해 둔 postId값 가져와서 특정화 시킨다!!!
-                let searchParams = new URLSearchParams(window.location.search)
-                let postId = searchParams.get('postId')
+                // let searchParams = new URLSearchParams(window.location.search)
+                // let postId = searchParams.get('postId')
+
+                // let searchPath = window.location.pathname
+                // let postId = searchPath.split('/')[2]
                 
                 $.ajax({
                     type: "GET",
-                    url: `/api/find-one-post?postId=${postId}`,
+                    url: `/api/post/${postId}`, // ?postId=${postId}
                     data: {},
                     success: function (response) {
                         let post = response["post"]
@@ -84,18 +90,20 @@
             function modifyPost() {
                                 // url로 쿼리 값 보내서 받아와? 뭘 쓰는진 알고 쓰니?
                 // 이제 안다!!! 주소에 저장 해 둔 postId값 가져와서 특정화 시킨다!!!
-                let searchParams = new URLSearchParams(window.location.search)
-                let postId = searchParams.get('postId')
+                // let searchParams = new URLSearchParams(window.location.search)
+                // let postId = searchParams.get('postId')
+
+                // let searchPath = window.location.pathname
+                // let postId = searchPath.split('/')[2]
                 
                 $.ajax({
-                    type: "POST",
-                    url: `/api/update-post?postId=${postId}`, // modify 와 update. 무엇이 더 적절한 이름일까?
+                    type: "PUT",
+                    url: `/api/post/${postId}`, // modify 와 update. 무엇이 더 적절한 이름일까? ?postId=${postId}
                     data: {
                         title:$('#title').val(),
                         description:$('#description').val(),
                         // password:$('#password').val(),
                         // nickname: user.nickname,
-                        
                     },
                     headers: {
                         authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -114,12 +122,15 @@
             // 삭제 함수
             function deletePost() { // 자고 일어나서 다시 본다
                 // url로 쿼리 값 보내서 받아와? 뭘 쓰는진 알고 쓰니?
-                let searchParams = new URLSearchParams(window.location.search)
-                let postId = searchParams.get('postId')
+                // let searchParams = new URLSearchParams(window.location.search)
+                // let postId = searchParams.get('postId')
+
+                // let searchPath = window.location.pathname
+                // let postId = searchPath.split('/')[2]
 
                 $.ajax({
                     type: "DELETE",
-                    url: `api/delete-post/${postId}`, // api/detail/:postId ${postId}
+                    url: `/api/post/${postId}`, // api/detail/:postId ${postId}
                     data: {
                         password: $('#password').val(),
                     },

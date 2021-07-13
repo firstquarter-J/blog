@@ -12,13 +12,13 @@ const authMiddleware = require("../middlewares/auth-middleware")
 // router.use(express.urlencoded({extended : false}));
 
 
-router.post('/save-comment', authMiddleware, async (req, res) => { // post
+router.post('/comment', authMiddleware, async (req, res) => { // post
 
     const { postId } = req.body
     // console.log(postId)
     const { user } = res.locals
     const author = user["nickname"] // 토큰 닉네임
-    console.log(author) // 토큰 닉네임
+    // console.log(author) // 토큰 닉네임
 
     const recentComment = await Comment.find().sort("-commentId").limit(1) // 최근 코메트 찾아서 정렬
 
@@ -35,9 +35,10 @@ router.post('/save-comment', authMiddleware, async (req, res) => { // post
   })
 
 
-router.get("/load-comment", async (req, res, next) => {
+router.get("/comment/:postId", async (req, res, next) => {
 
-    const { postId } = req.query
+    const { postId } = req.params
+
     console.log(postId)
 
     const comment = await Comment.find({ postId }).sort("-commentId") // 4
@@ -54,15 +55,15 @@ router.get("/load-comment", async (req, res, next) => {
 });
 
 
-router.delete("/delete-comment", authMiddleware, async (req, res) => { // /modify/:postId
+router.delete("/comment", authMiddleware, async (req, res) => { // /modify/:postId
     const { user } = res.locals
     const { commentId } = req.body
-    console.log(commentId)
+    // console.log(commentId)
 
     const tokenNickname = user["nickname"] // 토큰 닉네임
     const p = await Comment.findOne({ commentId }) // js의 위력. 선언하지 않고도 쓴다
     const dbNickname = p["author"] // 디비 닉네임
-    console.log(tokenNickname, dbNickname)
+    // console.log(tokenNickname, dbNickname)
     
     if ( tokenNickname === dbNickname ) {
         await Comment.deleteOne({ commentId })
@@ -72,9 +73,9 @@ router.delete("/delete-comment", authMiddleware, async (req, res) => { // /modif
         res.send({ result: "당신에게는 권한이 없습니다!서버" }) //틀렸다고 혼내준다
       }
   })
-  
 
-router.patch("/update-comment", authMiddleware, async (req, res) => {
+
+router.put("/comment", authMiddleware, async (req, res) => {
     const { user } = res.locals
     const { commentId, description } = req.body
 

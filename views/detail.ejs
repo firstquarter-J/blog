@@ -122,111 +122,108 @@
 
     <script type="text/javascript">
 
+        let postId = "<%= id %>"
+        console.log(postId)
+
         $(document).ready(function () {
             getPost()
             loadComment()
-            
         })
-
-
 
         // ${category ? "?category=" + category : ""}
         function getPost() {
             $("#postlist").empty()
+            // query sting
+            // let searchParams = new URLSearchParams(window.location.search)
+            // console.log(searchParams)
 
-            // url로 쿼리 값 보내서 받아와? 뭘 쓰는진 알고 쓰니?
-            // 이제 안다!!! 주소에 저장 해 둔 postId값 가져와서 특정화 시킨다!!!
-            let searchParams = new URLSearchParams(window.location.search)
-            let postId = searchParams.get('postId')
+            // path variable
+            // let searchPath = window.location.pathname
+            // let postId = searchPath.split('/')[2]
+
+            // let postId = searchParams.get('postId')
+            // console.log("----------------------")
+            // console.log(postId)
 
             $.ajax({
                 type: "GET",
-                url: `/api/find-one-post?postId=${postId}`, // detail
+                url: `/api/post/${postId}`, // ?postId=${postId}
                 data: {},
                 success: function (response) {
                     let post = response["post"]
-                    make_post_card(post)
+                    let temp_html = `
+                        <div class="card">
+                                <div class="card-header">
+                                    ${post["title"]}&nbsp; —— &nbsp;
+                                    <cite>${post["author"]}</cite>
+                                </div>
+                                <div class="card-body">
+                                <blockquote class="blockquote mb-0">
+                                    <p>${post["description"]}</p>
+                                    <footer class="blockquote-footer">${post["date"]}</footer>
+                                </blockquote>
+                                </div>
+                            </div>
+                            
+                            </div>
+                        </div>
+                    </div>
+                                        `
+                    $("#postlist").append(temp_html)
                 }
             })
-        }
-        //  ${item["description"]}
-        // <tr onclick="window.location='/detail?postId=${item['postId']}';">
-        //                     <a href="/detail"><td scope="col">${item["title"]}</td></a>
-        //                     <td scope="col">${item["author"]}</td>
-        //                     <td scope="col">${item["date"]}</td>
-        //                 </tr>
-        function make_post_card(item) {
-            let htmlTemp = `
-                <div class="card">
-                        <div class="card-header">
-                            ${item["title"]}&nbsp; —— &nbsp;
-                            <cite>${item["author"]}</cite>
-                        </div>
-                        <div class="card-body">
-                          <blockquote class="blockquote mb-0">
-                            <p>${item["description"]}</p>
-                            <footer class="blockquote-footer">${item["date"]}</footer>
-                          </blockquote>
-                        </div>
-                      </div>
-                      
-                    </div>
-                </div>
-
-</div>
-                                `
-            $("#postlist").append(htmlTemp)
         }
         
         function saveComment() {
 
         // url로 쿼리 값 보내서 받아와? 뭘 쓰는진 알고 쓰니?
         // 이제 안다!!! 주소에 저장 해 둔 postId값 가져와서 특정화 시킨다!!!
-            let searchParams = new URLSearchParams(window.location.search)
-            let postId = searchParams.get('postId')
+        // let searchParams = new URLSearchParams(window.location.search)
+        // let postId = searchParams.get('postId')
+
+            // let searchPath = window.location.pathname
+            // let postId = searchPath.split('/')[2]
+            console.log("----------------------")
+            console.log(postId)
 
             if ($('#description').val().length === 0) { // 어디서 뭘 가져올거고 가져 갈건지 명확하게 생각해서 써라
                 alert("댓글 내용을 입력해 주세요")
                 window.location.reload()
             } else {
                 $.ajax({
-                type: "POST",
-                url: "api/save-comment",
-                data: {
-                    postId,
-                    description:$('#description').val(),
-                },
-                headers: {
-                    authorization: `Bearer ${localStorage.getItem("token")}`,
-                },
-                success: function (response) {
-                    if (response["result"] == "success") {
-                        alert("댓글 작성 완료!")
+                    type: "POST",
+                    url: "/api/comment",
+                    data: {
+                        postId,
+                        description:$('#description').val(),
+                    },
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                    success: function (response) {
+                        if (response["result"] == "success") {
+                            alert("댓글 작성 완료!")
+                        }
+                        // window.location.href = `/detail?postId=${postId}` // 두가지 방법을 쓸 수 있다아~
+                        window.location.reload()
                     }
-                    // window.location.href = `/detail?postId=${postId}` // 두가지 방법을 쓸 수 있다아~
-                    window.location.reload()
-                }
-            })
+                })
             }
-
-
         }
 
         function loadComment(){
-
                         // url로 쿼리 값 보내서 받아와? 뭘 쓰는진 알고 쓰니?
             // 이제 안다!!! 주소에 저장 해 둔 postId값 가져와서 특정화 시킨다!!!
-            let searchParams = new URLSearchParams(window.location.search)
-            let postId = searchParams.get('postId')
-
+            // let searchParams = new URLSearchParams(window.location.search)
+            // let postId = searchParams.get('postId')
             $.ajax({
                 type: "GET",
-                url: `/api/load-comment`,
-                dataType:'json',
-                data: { postId },
+                url: `/api/comment/${postId}`,
+                // dataType:'json',
+                data: {},
                 success: function (response) {
                     let comment = response["comment"]
-                    // console.log(comment) // 함 찍어 봤다
+                    console.log(comment) // 함 찍어 봤다
                     for ( let i = 0; i < comment.length; i++ ) {
 
                         let author = comment[i]['author']
@@ -259,7 +256,7 @@
             if(confirm("정말로 삭제하시겠습니까?") == true) { 
                 $.ajax({
                 type: "DELETE",
-                url: `api/delete-comment`,
+                url: `/api/comment`,
                 data: { commentId },
                 headers: {
                     authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -291,8 +288,8 @@
             if ($('#btn-modify'+commentId).text() === '수정완료') {
 
                 $.ajax({
-                    type: "PATCH",
-                    url: `api/update-comment`,
+                    type: "PUT",
+                    url: `/api/comment`,
                     data: { 
                         commentId, 
                         description: $('#newDesc').val(),
@@ -334,10 +331,14 @@
         }
 
         function modifyPost() {
-            let searchParams = new URLSearchParams(window.location.search)
-            let postId = searchParams.get('postId')
+            // let searchParams = new URLSearchParams(window.location.search)
+            // let postId = searchParams.get('postId')
+            // let searchPath = window.location.pathname
+            // let postId = searchPath.split('/')[2]
 
-            window.location.href = `/modify?postId=${postId}` // 리다이랙트
+
+
+            window.location.href = `/modify/${postId}` // 리다이랙트 ?postId=${postId}
         }
 
         function alarm() {

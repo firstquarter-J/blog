@@ -33,26 +33,22 @@
                 // $("#postlist").empty()
                 $.ajax({
                     type: "GET",
-                    url: `/api/load-post`,
+                    url: `/api/post`,
                     data: {},
                     success: function (response) {
                         let post = response["post"]
                         console.log(post)
                         for ( let i = 0; i < post.length; i++ ) {
-                            makeCard(post[i])
+                                                                            // detail?postId=${post[i]['postId']}
+                            let temp_html = `<tr onclick="window.location='detail/${post[i]["postId"]}';">
+                                                <a href="/detail"><td scope="col">${post[i]["title"]}</td></a>
+                                                <td scope="col">${post[i]["author"]}</td>
+                                                <td scope="col">${post[i]["date"]}</td>
+                                            </tr>`
+                            $("#postlist").append(temp_html)
                         }
                     }
                 })
-            }
-
-            function makeCard(post) {
-                                                            //findeOne-post
-                let htmlTemp = `<tr onclick="window.location='detail?postId=${post['postId']}';">
-                                    <a href="/detail"><td scope="col">${post["title"]}</td></a>
-                                    <td scope="col">${post["author"]}</td>
-                                    <td scope="col">${post["date"]}</td>
-                                </tr>`
-                $("#postlist").append(htmlTemp)
             }
 
             function makePost() {
@@ -122,7 +118,7 @@
         <section class="hero is-primary">
             <div class="hero-body">
                 <p class="title">
-                    <a href="/">950113</a>
+                    <a href="/">김예지</a>
                 </p>
                 <p class="subtitle">
                     너 없었으면 어떻게 코딩 하니
