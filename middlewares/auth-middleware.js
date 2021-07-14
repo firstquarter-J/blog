@@ -7,7 +7,7 @@ module.exports = (req, res, next) => {
     // console.log(req)
     const { authorization } = req.headers
     // console.log(req.headers)
-    // console.log(authorization)
+    console.log(authorization)
     // 프론트에서 대문자로 보내도 무조건 소문자로 들어와
     // 'Bearer null'// 문 자 열 이 야
     const [tokenType, tokenValue] = authorization.split(' ')
@@ -35,7 +35,9 @@ module.exports = (req, res, next) => {
 
         
 
-        User.findOne({ userId }).exec().then((user) => {
+        User.findOne({ userId })
+        .exec()
+        .then((user) => {
             res.locals.user = user // 엄청 편해져? // locals 라는 곳에 담는데 이 미들웨어 사용하는 모든 곳에서 사용 가능
             next()
         })

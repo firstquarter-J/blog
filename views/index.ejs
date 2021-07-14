@@ -3,7 +3,7 @@
 
     <head>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma-rtl.min.css">
-        
+
         <title>첫 화면</title>
 
         <!-- Required meta tags -->
@@ -12,8 +12,8 @@
 
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-              integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-              crossorigin="anonymous">
+            integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+            crossorigin="anonymous">
 
         <!-- JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -21,14 +21,25 @@
             integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
             crossorigin="anonymous"></script>
 
+    <script src="/js/user.js"></script>
+
+
         <script>
             $(document).ready(function () {
-                
+
                 loadPost()
-            
+
+                if ( localStorage.getItem("token") ) {
+                    userName()
+                    $('#join').hide()
+                    $('#login').hide()
+                } else {
+                    $('#logout').hide()
+                }
+                // if localStorage.getItem("token") ? userName() : return
+                // 죄송합니다
             })
 
-            // 포스트 가져오기 api : load-post
             function loadPost() {
                 // $("#postlist").empty()
                 $.ajax({
@@ -49,24 +60,6 @@
                         }
                     }
                 })
-            }
-
-            function makePost() {
-                // 버튼 눌렀을때 new 페이지로 이동... 어떻게?
-                window.location.href = '/new'
-            }
-
-            function join() {
-                window.location.href = '/join'
-            }
-
-            function login() {
-                window.location.href = '/login'
-            }
-
-            function logout() {
-                localStorage.clear();
-                window.location.href = "/";
             }
 
         </script>
@@ -123,17 +116,22 @@
                 <p class="subtitle">
                     너 없었으면 어떻게 코딩 하니
                 </p>
+                <div id="name">
+                    <!-- <p>
+                    </p> -->
+                </div>
+
             </div>
             </section>
             <div class="join-box">
                 <div class="">
-                    <button onclick="join()" class="button is-primary">회원가입</button>
+                    <button id="join" onclick="join()" class="button is-primary">회원가입</button>
                 </div>
                 <div class="">
-                    <button onclick="login()" class="button is-primary">로그인</button>
+                    <button id="login" onclick="login()" class="button is-primary">로그인</button>
                 </div>
                 <div class="">
-                    <button onclick="logout()" class="button is-primary">로그아웃</button>
+                    <button id="logout" onclick="logout()" class="button is-primary">로그아웃</button>
                 </div>
             </div>
 
@@ -152,7 +150,7 @@
                     </tr>
                     </thead>
                     <tbody id="postlist">
-                        
+
                     </tbody>
                 </table>
             </div>

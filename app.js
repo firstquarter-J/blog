@@ -31,6 +31,9 @@ app.set('view engine', 'ejs')
 //     - 작성 날짜 기준으로 내림차순 정렬하기
 //     - 특정 게시글을 클릭할 경우 `게시글 조회 페이지`로 이동하기
 app.get('/', (req, res) => {
+  // const { user } = res.locals
+  // console.log(user)
+
     res.render('index')
 })
 
@@ -94,3 +97,6 @@ app.listen(port, () => {
 
 // git 실험중
 // 2번째
+
+// const cors = require('cors'); app.use(cors({ origin: '*', credentials: true, }));
+// npm i cors

@@ -38,19 +38,25 @@
         }
     </style>
 
-    <script src="/get-self.js"></script>
+    <script src="js/get-self.js"></script>
 
     <script>
 
-        let user;
+        let user
             $(document).ready(function () {
                 
                 getSelf(function (u) {
                     user = u
+                    
+                    // console.log(user)
+                    // let sendAuthor = user.nickname
+                    // console.log(sendAuthor)
+                    // document.getElementById("author").value = sendAuthor;
                 })
             })
 
         // 포스트 저장하기 api : save-post
+
         function makePost() {
             $.ajax({
                 type: "POST",
@@ -70,7 +76,15 @@
                 }
             })
         }
+
     </script>
+<!-- 
+<script>
+    document.getElementById("submitRedirect").onclick = function () {
+        location.href = "/"
+    }
+</script> -->
+
 </head>
 <body>
     <section class="hero is-primary">
@@ -95,6 +109,28 @@
       <div class="post">
         <button onclick="makePost()" class="button is-primary">글 작성하기</button>
     </div>
+
+        <!-- Form which will send a GET request to the current URL -->
+    <!-- <form action="/api/post" method="post" onsubmit="alert('작성 완료!')">
+
+        <div>
+            <label for nickname>제목:
+                <input type="text" name="title" placeholder="제목?" autocomplete="name" />
+            </label>
+        </div>
+        <div>
+            <label for textarea>내용:
+                <textarea name="description" placeholder="내용을 입력하세요"></textarea>
+            </label>
+        </div>
+        <div>
+            <input type="hidden" id="author" name="author" value="">
+        </div>
+        <div>
+            <button id="submitRedirect" type="submit">글 작성하기</button>
+        </div>
+
+    </form> -->
 
 </body>
 </html>

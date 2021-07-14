@@ -19,7 +19,7 @@ router.get("/post", async (req, res, next) => { // post
     }
   })
 
-//   Application Programming Interface
+// Application Programming Interface
 // 응용 프로그램 프로그래밍 인터페이스
 // 프로그램 안의 작은 프로그램
 
@@ -36,8 +36,9 @@ router.post('/post', async (req, res) => { // post
 
     const date = ( new Date().format("yyyy-MM-dd a/p hh:mm:ss"))
     await Post.create({ postId, title, description, date, author }) //만들어서 집어넣는다.
-    res.send({ result: "success" }) //잘했다고 칭찬해준다.ㅋㅋㅋㅋㅋㅋㅋㅋ
-  })
+     res.send({ result: "success" }) //잘했다고 칭찬해준다.ㅋㅋㅋㅋㅋㅋㅋㅋ
+    // res.render('index')
+})
 
 
 

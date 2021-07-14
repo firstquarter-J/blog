@@ -120,18 +120,20 @@
         }
     </style>
 
+    <script src="/js/user.js"></script>
+
     <script type="text/javascript">
 
         let postId = "<%= id %>"
         console.log(postId)
 
         $(document).ready(function () {
-            getPost()
+            getDetailPost()
             loadComment()
         })
 
         // ${category ? "?category=" + category : ""}
-        function getPost() {
+        function getDetailPost() {
             $("#postlist").empty()
             // query sting
             // let searchParams = new URLSearchParams(window.location.search)
@@ -348,6 +350,8 @@
             }
         }
 
+        
+
     </script>
 
     <style type="text/css">
@@ -395,6 +399,10 @@
             /* text-align: center; */
             margin: auto;
         }
+        .join-box {
+                text-align: center;
+                /* display: inline; */
+            }
     </style>
 </head>
 
@@ -409,6 +417,18 @@
             </p>
         </div>
     </section>
+
+    <div class="join-box">
+        <div class="">
+            <button id="join" onclick="join()" class="button is-primary">회원가입</button>
+        </div>
+        <div class="">
+            <button id="login" onclick="login()" class="button is-primary">로그인</button>
+        </div>
+        <div class="">
+            <button id="logout" onclick="logout()" class="button is-primary">로그아웃</button>
+        </div>
+    </div>
 
     <div class="post">
         <button onclick="modifyPost()" class="button is-primary">수정</button>
