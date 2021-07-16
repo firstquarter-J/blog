@@ -8,11 +8,15 @@ const userSchema = new Schema({
     required: true,
     unique: true,
   },
+  // id: {
+  //   type: String,
+  //   required: true,
+  // },
   nickname: {
     type: String,
     required: true,
   },
-  password: {
+  hashedPassword: {
     type: String,
     required: true,
   },

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "app.js",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "body-parser": "^1.19.0",
     "bulma": "^0.9.3",
     "ejs": "^3.1.6",
@@ -13,7 +14,10 @@
     "mongose": "0.0.2-security",
     "nodemon": "^2.0.9"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "swagger-jsdoc": "^6.1.0",
+    "swagger-ui-express": "^4.1.6"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

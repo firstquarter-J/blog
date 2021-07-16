@@ -130,6 +130,14 @@
         $(document).ready(function () {
             getDetailPost()
             loadComment()
+
+            if ( localStorage.getItem("token") ) {
+                userName()
+                $('#join').hide()
+                $('#login').hide()
+            } else {
+                $('#logout').hide()
+            }
         })
 
         // ${category ? "?category=" + category : ""}
@@ -415,6 +423,10 @@
             <p class="subtitle">
                 글 상세 보기
             </p>
+            <div id="name">
+                <!-- <p>
+                </p> -->
+            </div>
         </div>
     </section>
 
