@@ -16,6 +16,6 @@
 
  - 서버에 값을 보내는 방식을 ajax 와 form 두가지로 구현
 
-`21-07-15 reFactoring`
+`21-07-15 Refactoring`
 
  - password hashing with bcrypt
