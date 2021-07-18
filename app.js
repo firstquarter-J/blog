@@ -5,7 +5,6 @@ const port = 3000
 const connect = require('./schemas')
 connect()
 const authMiddleware = require("./middlewares/auth-middleware")
-const Joi = require("joi")
 
 app.use(express.urlencoded({ extended: false })) // 동기? 비동기? 순서가 중요하네? goodsRouter 보다 아래 있으니 에러!
 app.use(express.json()) // json 가져오는 express 사용법?

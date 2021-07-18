@@ -2,7 +2,7 @@ const express = require("express")
 // const { title } = require("process")
 const router = express.Router() //라우터라고 선언한다.
 
-const url = require('url')
+
 const Comment = require("../schemas/comment")
 const authMiddleware = require("../middlewares/auth-middleware")
 
