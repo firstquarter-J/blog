@@ -6,6 +6,11 @@ const connect = require('./schemas')
 connect()
 const authMiddleware = require("./middlewares/auth-middleware")
 
+// swagger
+const { swaggerUi, specs } = require('./swagger/swagger');
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+
+
 app.use(express.urlencoded({ extended: false })) // 동기? 비동기? 순서가 중요하네? goodsRouter 보다 아래 있으니 에러!
 app.use(express.json()) // json 가져오는 express 사용법?
 //app.use(express.static('public')) // statuc 폴더 경로 명시?
@@ -29,6 +34,7 @@ app.set('view engine', 'ejs')
 //     - 제목, 작성자명, 작성 날짜를 조회하기
 //     - 작성 날짜 기준으로 내림차순 정렬하기
 //     - 특정 게시글을 클릭할 경우 `게시글 조회 페이지`로 이동하기
+
 app.get('/', (req, res) => {
   // const { user } = res.locals
   // console.log(user)

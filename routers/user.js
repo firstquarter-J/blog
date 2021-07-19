@@ -8,6 +8,11 @@ const User = require("../schemas/user")
 const Joi = require("joi")
 const bcrypt = require('bcrypt');
 
+/**
+ *  @swagger
+ *    $ref: 'swagger/userAPI.yml'
+ */
+
 // 조이 스키마 정의. 올바른 스키마인지 검증
 const postUsersSchema = Joi.object({
     nickname: Joi.string()
