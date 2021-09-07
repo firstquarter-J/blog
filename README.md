@@ -1,5 +1,11 @@
 # blog
 
+개발자 인생 첫 결과물입니다.
+
+`핵심 기능`
+
+회원가입, 로그인, 게시글 & 댓글 CRUD
+
 `21-07-13 Refactoring`
 
  - query string -> path variable 방식으로 변경
