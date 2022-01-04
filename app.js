@@ -7,8 +7,8 @@ connect()
 const authMiddleware = require("./middlewares/auth-middleware")
 
 // swagger
-const { swaggerUi, specs } = require('./swagger/swagger');
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+// const { swaggerUi, specs } = require('./swagger/swagger');
+// app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 
 app.use(express.urlencoded({ extended: false })) // 동기? 비동기? 순서가 중요하네? goodsRouter 보다 아래 있으니 에러!
