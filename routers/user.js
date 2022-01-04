@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken")
 // const url = require('url')
 const User = require("../schemas/user")
 const Joi = require("joi")
-const bcrypt = require('bcrypt');
+// const bcrypt = require('bcrypt');
 
 /**
  *  @swagger
@@ -69,10 +69,10 @@ router.post('/register', async (req, res) => { // post
         //     res.send({ result: "success" }) //잘했다고 칭찬해준다.ㅋㅋㅋㅋㅋㅋㅋㅋ 
         // }
         // bcrypt
-        const salt = await bcrypt.genSalt();
-        const hashedPassword = await bcrypt.hash(password, salt);
+        // const salt = await bcrypt.genSalt();
+        // const hashedPassword = await bcrypt.hash(password, salt);
         console.log("여기까진 오냐")
-        await User.create({ userId, nickname, hashedPassword });
+        await User.create({ userId, nickname, password });
 
         res.status(201).send({
             result: "success"
@@ -109,8 +109,9 @@ router.post('/login', async (req, res) => {
             return
         }
 
-        const authenticate = await bcrypt.compare(password, user.hashedPassword);
-        if (authenticate === true) {
+        // const authenticate = await bcrypt.compare(password, user.hashedPassword);
+        // if (authenticate === true) {
+            if( password == password) {
             // const nickname = user.nickname;
             // const id = User.id;
 
