@@ -100,9 +100,9 @@ app.get("/api/users/me", authMiddleware, async (req, res) => {
 })
 
 // HTTPS 설정할 땐 없애?
-app.listen(port, () => {
-    console.log(`listening at http://localhost:${port}`)
-})
+// app.listen(port, () => {
+//     console.log(`listening at http://localhost:${port}`)
+// })
 
 // HTTPS 경로 설정 ~?
 const fs = require('fs');
