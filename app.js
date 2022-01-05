@@ -100,7 +100,14 @@ app.get("/api/users/me", authMiddleware, async (req, res) => {
 })
 
 // Tokopedia Webhook Test
-app.post('/listener', (req, res) => res.send('Hello, World!'));
+// app.post('/listener', (req, res) => res.send('Hello, World!'));
+
+app.use(bodyParser.json());
+
+app.post('/listener', (req, res) => {
+    res.send(req.body.message);
+})
+
 
 // HTTPS 설정할 땐 없애?
 // app.listen(port, () => {
