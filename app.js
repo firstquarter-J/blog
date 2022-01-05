@@ -2,6 +2,9 @@ const express = require('express')
 const app = express()
 const port = 3000
 
+// HTTPS 인증 폴더 ~?
+app.use(express.static('public'));
+
 const connect = require('./schemas')
 connect()
 const authMiddleware = require("./middlewares/auth-middleware")
