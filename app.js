@@ -102,7 +102,7 @@ app.get("/api/users/me", authMiddleware, async (req, res) => {
 // Tokopedia Webhook Test
 // app.post('/listener', (req, res) => res.send('Hello, World!'));
 
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
 
 app.post('/listener', (req, res) => {
     res.send(req.body.message);
