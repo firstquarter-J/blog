@@ -5,20 +5,6 @@ const port = 3000
 // HTTPS 인증 폴더 ~?
 app.use(express.static('public'));
 
-// HTTPS 경로 설정 ~?
-const fs = require('fs');
-const http=require("http");
-const https=require("https");
-
- const options = { // letsencrypt로 받은 인증서 경로를 입력
-  ca: fs.readFileSync('/etc/letsencrypt/live/firstquarter.shop/fullchain.pem'),
-  key: fs.readFileSync('/etc/letsencrypt/live/firstquarter.shop/privkey.pem'),
-  cert: fs.readFileSync('/etc/letsencrypt/live/firstquarter.shop/cert.pem')
-  };
-  http.createServer(app).listen(3000);
-  https.createServer(options, app).listen(443);
-
-
 const connect = require('./schemas')
 connect()
 const authMiddleware = require("./middlewares/auth-middleware")
@@ -114,9 +100,22 @@ app.get("/api/users/me", authMiddleware, async (req, res) => {
 })
 
 // HTTPS 설정할 땐 없애?
-// app.listen(port, () => {
-//     console.log(`listening at http://localhost:${port}`)
-// })
+app.listen(port, () => {
+    console.log(`listening at http://localhost:${port}`)
+})
+
+// HTTPS 경로 설정 ~?
+const fs = require('fs');
+const http=require("http");
+const https=require("https");
+
+ const options = { // letsencrypt로 받은 인증서 경로를 입력
+  ca: fs.readFileSync('/etc/letsencrypt/live/firstquarter.shop/fullchain.pem'),
+  key: fs.readFileSync('/etc/letsencrypt/live/firstquarter.shop/privkey.pem'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/firstquarter.shop/cert.pem')
+  };
+  http.createServer(app).listen(3000);
+  https.createServer(options, app).listen(443);
 
 // git 실험중
 // 2번째

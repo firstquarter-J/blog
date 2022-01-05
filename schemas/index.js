@@ -3,6 +3,7 @@ const mongoose = require("mongoose")
 const connect = () => {
   mongoose
     .connect("mongodb://localhost:27017/admin", { // blog admin
+    // .connect("mongodb://localhost:27017/blog", { // blog admin
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,
