@@ -159,7 +159,7 @@ app.get('/', (req, res) => {
     // console.log('\x1b[37m37\x1b[0m');
     // console.log('\x1b[1;37m37\x1b[0m');
 
-    res.render("index", data)
+    res.render("index")
 
   } catch (err) {
       console.error(err);
