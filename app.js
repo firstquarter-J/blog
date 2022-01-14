@@ -94,7 +94,7 @@ try {
           \x1b[1;3;35m야\x1b[0m`)
     });
 } catch (err) {
-  console.error(`ㅇ ㅔ  ㄹ ㅓ  ! => ${err}`)
+  console.error(`HTTPS 연결 ㅇ ㅔ  ㄹ ㅓ  ! => ${err}`)
 
   const port = 3000;
   app.listen(port, () => {
