@@ -7,12 +7,12 @@ function userName() {
         authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         success: function(response) {
-            console.log(response)
+            // console.log(response)
             let name = response["user"]["nickname"]
-            console.log(name)
+            // console.log(name)
 
             let temp_html = `<p>
-                                ${name}님 안녕하세요!
+                                ${name} 님 안녕하세요!
                             </p>`
             $('#name').append(temp_html)
 

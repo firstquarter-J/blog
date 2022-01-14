@@ -3,7 +3,7 @@ const User = require("../schemas/user")
 // const split =require()
 
 module.exports = (req, res, next) => {
-    console.log("auth 미들웨어 동작확인!") // 미들웨어 호출확인
+    // console.log("auth 미들웨어 동작확인!") // 미들웨어 호출확인
     // console.log(req)
     const { authorization } = req.headers
     // console.log(req.headers)

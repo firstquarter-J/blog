@@ -193,8 +193,8 @@
 
             // let searchPath = window.location.pathname
             // let postId = searchPath.split('/')[2]
-            console.log("----------------------")
-            console.log(postId)
+            // console.log("----------------------")
+            // console.log(postId)
 
             if ($('#description').val().length === 0) { // 어디서 뭘 가져올거고 가져 갈건지 명확하게 생각해서 써라
                 alert("댓글 내용을 입력해 주세요")
@@ -233,7 +233,7 @@
                 data: {},
                 success: function (response) {
                     let comment = response["comment"]
-                    console.log(comment) // 함 찍어 봤다
+                    // console.log(comment) // 함 찍어 봤다
                     for ( let i = 0; i < comment.length; i++ ) {
 
                         let author = comment[i]['author']
@@ -308,7 +308,7 @@
                         authorization: `Bearer ${localStorage.getItem("token")}`,
                     },
                     success: function (response) {
-                        console.log(response)
+                        // console.log(response)
                         if (response["result"] == "success") {
                             alert("수정 완료!")
                         } else {

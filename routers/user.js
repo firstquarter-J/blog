@@ -71,7 +71,7 @@ router.post('/register', async (req, res) => { // post
         // bcrypt
         // const salt = await bcrypt.genSalt();
         // const hashedPassword = await bcrypt.hash(password, salt);
-        console.log("여기까진 오냐")
+        // console.log("여기까진 오냐")
         await User.create({ userId, nickname, password });
 
         res.status(201).send({

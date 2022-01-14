@@ -30,8 +30,8 @@ router.post('/post', async (req, res) => { // post
     if(recentPost.length != 0){ // 최근 포스트가 있으면
       postId = recentPost[0]['postId'] + 1 // 새 배열 생성해서 1번부터 번호 부여
     }
-    console.log(req.body)//저장할 아이템들을 body로 받아오므로, body를 한번 찍어봤다.
-    console.log(postId)
+    // console.log(req.body)//저장할 아이템들을 body로 받아오므로, body를 한번 찍어봤다.
+    // console.log(postId)
     const { title, description, author } = req.body //받은 body를 변수로 하나씩 넣어준다.
 
     const date = ( new Date().format("yyyy-MM-dd a/p hh:mm:ss"))
