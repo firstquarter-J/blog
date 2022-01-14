@@ -1,24 +1,118 @@
 const express = require('express')
 const app = express()
-const port = 3000
+
+app.use(express.urlencoded({ extended: false }))
+app.use(express.json())
+
+const cors = require("cors");
+app.use(cors({ origin: true, credentials: true }));
+
+const connect = require('./schemas')
+connect()
+
+const authMiddleware = require("./middlewares/auth-middleware")
 
 // HTTPS 인증 폴더 ~?
 app.use(express.static('public'));
 
-const connect = require('./schemas')
-connect()
-const authMiddleware = require("./middlewares/auth-middleware")
+// webhook secret
+const crypto = require('crypto')
+const bodyParser = require('body-parser')
 
-// swagger
-// const { swaggerUi, specs } = require('./swagger/swagger');
-// app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+const YOUR_WEBHOOK_KEY = "Codebrick"
+
+app.use(bodyParser.json())
+
+// Tokopedia Webhook Test
+
+app.post('/hi', (req, res) => {
+  try {
+    const reqBody = req.body
+    const reqParams = req.params
+    const reqQuery = req.query
+    const reqMethods = req.methods
+    const reqUrl = req.url
+    console.log("\x1b[1;3;31m포스트!!!\x1b[0m");
+    console.log("\x1b[1;36mreq.body => \x1b[0m", req.body);
+    console.log("\x1b[1;33mreq.headers => \x1b[0m", req.headers);
+    console.log(`\x1b[1;31m---절취선---\x1b[0m`, `\x1b[1;36m${new Date()}\x1b[0m`);
+    
+    // Encrypt with SHA-256 and Encode to hexadecimal
+    let hmac = crypto.createHmac('sha256', YOUR_WEBHOOK_KEY)
+    .update(JSON.stringify(req.body))
+    .digest('hex')
+    console.log('이거 내꺼!!!==========>', hmac)
+    
+    console.log("이거 니네꺼=====> ", req.get('Authorization-hmac'))
+    console.log("이거 니네꺼=====> ", req.get('Authorization-hmac'))
+
+    // Compare our HMAC with your HMAC
+    if(!crypto.timingSafeEqual(Buffer.from(hmac), Buffer.from(req.get('Authorization-Hmac')))) {
+        console.log('\x1b[1;3;31m---Failed to verify!---\x1b[0m')
+        return
+    }
+    console.log('\x1b[1;3;36m---Successfully verified!---\x1b[0m')
+
+    res.status(200).send({
+      ok: true,
+      reqBody,
+      reqParams,
+      reqQuery,
+      reqMethods,
+      reqUrl
+    });
+
+  } catch (err) {
+      console.error(err);
+
+      res.status(400).send({
+        ok: false,
+        message: `ㅇㅔ~~~~~~~~~~~~~~~~~~러 발생 => ${err}`
+      })
+  }
+})
+
+// Local HTTP or AWS Server HTTPS
+try {
+  app.use(express.static('public'));
+  const fs = require('fs');
+  const http=require("http");
+  const https=require("https");
+  const options = {
+    ca: fs.readFileSync('/etc/letsencrypt/live/firstquarter.shop/fullchain.pem'),
+    key: fs.readFileSync('/etc/letsencrypt/live/firstquarter.shop/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/firstquarter.shop/cert.pem')
+    };
+    http.createServer(app).listen(3000);
+    https.createServer(options, app).listen(443, () => {
+      console.log(
+        `\x1b[1;3;31m안
+  \x1b[0m\x1b[1;3;33m녕\x1b[0m
+    \x1b[1;3;32m난\x1b[0m
+      \x1b[1;3;36m서\x1b[0m
+        \x1b[1;3;34m버\x1b[0m
+          \x1b[1;3;35m야\x1b[0m`)
+    });
+} catch (err) {
+  console.error(`ㅇ ㅔ  ㄹ ㅓ  ! => ${err}`)
+
+  const port = 3000;
+  app.listen(port, () => {
+      console.log(
+        `\x1b[1;3;31m안
+  \x1b[0m\x1b[1;3;33m녕\x1b[0m
+    \x1b[1;3;32m난\x1b[0m
+      \x1b[1;3;36m서\x1b[0m
+        \x1b[1;3;34m버\x1b[0m
+          \x1b[1;3;35m야\x1b[0m
+            \x1b[1;3;36mhttp://localhost:${port}\x1b[0m`)
+  })
+}
 
 
-app.use(express.urlencoded({ extended: false })) // 동기? 비동기? 순서가 중요하네? goodsRouter 보다 아래 있으니 에러!
-app.use(express.json()) // json 가져오는 express 사용법?
-//app.use(express.static('public')) // statuc 폴더 경로 명시?
+
+
 app.use(express.static('assets'))
-
 
 const postRouter = require("./routers/post") //라우터를 생성한다. goods.js파일을 라우터로 사용한다.
 app.use("/api", [postRouter]) //api를 호출해서 get등의 방식으로 데이터를 리턴한다
@@ -39,10 +133,42 @@ app.set('view engine', 'ejs')
 //     - 특정 게시글을 클릭할 경우 `게시글 조회 페이지`로 이동하기
 
 app.get('/', (req, res) => {
-  // const { user } = res.locals
-  // console.log(user)
+  try {
+    console.log('\x1b[1;3;31m하\x1b[0m');
+    console.log('\x1b[1;3;33m  잉\x1b[0m');
+    console.log('\x1b[1;3;32m    지\x1b[0m');
+    console.log('\x1b[1;3;36m      금\x1b[0m');
+    console.log('\x1b[1;3;34m        은\x1b[0m');
+    console.log('\x1b[1;3;35m          몇\x1b[0m');
+    console.log('\x1b[1;3;30m            시~?\x1b[0m');
+    console.log('\x1b[1;3;36m                \x1b[0m', `\x1b[1;36m${new Date()}\x1b[0m`);
+    // console.log('\x1b[30m30= 검은색\x1b[0m');
+    // console.log('\x1b[1;30m30 bold = 회색\x1b[0m');
+    // console.log('\x1b[31m31 = 빨간색\x1b[0m');
+    // console.log('\x1b[1;31m31 bold = 밝은 빨간색\x1b[0m');
+    // console.log('\x1b[32m32 = 초록색\x1b[0m');
+    // console.log('\x1b[1;32m32 bold = 밝은 초록색\x1b[0m');
+    // console.log('\x1b[33m33\x1b[0m');
+    // console.log('\x1b[1;33m33\x1b[0m');
+    // console.log('\x1b[34m34\x1b[0m');
+    // console.log('\x1b[1;34m34\x1b[0m');
+    // console.log('\x1b[35m35\x1b[0m');
+    // console.log('\x1b[1;35m35\x1b[0m');
+    // console.log('\x1b[36m36\x1b[0m');
+    // console.log('\x1b[1;36m36\x1b[0m');
+    // console.log('\x1b[37m37\x1b[0m');
+    // console.log('\x1b[1;37m37\x1b[0m');
 
-    res.render('index')
+    res.render("index", data)
+
+  } catch (err) {
+      console.error(err);
+
+      res.status(400).send({
+        ok: false,
+        message: `ㅇㅔ~~~~~~~~~~~~~~~~~~러 발생 => ${err}`
+      })
+  }
 })
 
   // 2. 게시글 작성 페이지
@@ -98,37 +224,3 @@ app.get("/api/users/me", authMiddleware, async (req, res) => {
       // }
   })
 })
-
-// Tokopedia Webhook Test
-// app.post('/listener', (req, res) => res.send('Hello, World!'));
-
-// app.use(bodyParser.json());
-
-app.post('/listener', (req, res) => {
-    res.send(req.body.message);
-})
-
-
-// HTTPS 설정할 땐 없애?
-// app.listen(port, () => {
-//     console.log(`listening at http://localhost:${port}`)
-// })
-
-// HTTPS 경로 설정 ~?
-const fs = require('fs');
-const http=require("http");
-const https=require("https");
-
- const options = { // letsencrypt로 받은 인증서 경로를 입력
-  ca: fs.readFileSync('/etc/letsencrypt/live/firstquarter.shop/fullchain.pem'),
-  key: fs.readFileSync('/etc/letsencrypt/live/firstquarter.shop/privkey.pem'),
-  cert: fs.readFileSync('/etc/letsencrypt/live/firstquarter.shop/cert.pem')
-  };
-  http.createServer(app).listen(3000);
-  https.createServer(options, app).listen(443);
-
-// git 실험중
-// 2번째
-
-// const cors = require('cors'); app.use(cors({ origin: '*', credentials: true, }));
-// npm i cors
