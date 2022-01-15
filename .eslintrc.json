@@ -1,0 +1,17 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true,
+        "node": true // 에러 방지 위해 browswer, node 둘다 true
+    },
+    "extends": [
+        "airbnb-base"
+    ],
+    "parserOptions": {
+        "ecmaVersion": 13,
+        "sourceType": "module"
+    },
+    "rules": {
+        "no-unused-vars": "warn"
+    }
+}
