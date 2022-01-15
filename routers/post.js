@@ -89,8 +89,8 @@ router.delete("/post/:postId", authMiddleware, async (req, res) => { // /modify/
   const dbNickname = p["author"] // 디비 닉네임
 
   const commentDelete = await Comment.find({ postId })
-  console.log(postId)
-  console.log(commentDelete)
+  // console.log(postId)
+  // console.log(commentDelete)
 
   if ( tokenNickname == dbNickname ) {
     await Post.deleteOne({ postId })

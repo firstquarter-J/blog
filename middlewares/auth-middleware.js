@@ -7,7 +7,7 @@ module.exports = (req, res, next) => {
     // console.log(req)
     const { authorization } = req.headers
     // console.log(req.headers)
-    console.log(authorization)
+    // console.log(authorization)
     // 프론트에서 대문자로 보내도 무조건 소문자로 들어와
     // 'Bearer null'// 문 자 열 이 야
     const [tokenType, tokenValue] = authorization.split(' ')

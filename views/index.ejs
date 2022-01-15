@@ -12,26 +12,25 @@
 
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-            integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-            crossorigin="anonymous">
+            integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
         <!-- JS -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
             integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
             crossorigin="anonymous"></script>
 
-    <script src="/js/user.js"></script>
+        <script src="/js/user.js"></script>
 
         <script>
-                        console.log(`%c안%c녕 %c난 %c프%c론%c트%c야`, 
-                        "color: red; font-style: italic; padding: 4px; border-radius: 4px; font-size: 88px", 
-                        "color: orange; font-style: italic; padding: 4px; border-radius: 4px; font-size: 88px", 
-                        "color: yellow; font-style: italic; padding: 4px; border-radius: 4px; font-size: 88px", 
-                        "color: #9BFA73; font-style: italic; padding: 4px; border-radius: 4px; font-size: 88px", 
-                        "color: #C0FFFF; font-style: italic; padding: 4px; border-radius: 4px; font-size: 88px", 
-                        "color: #0000CD; font-style: italic; padding: 4px; border-radius: 4px; font-size: 88px", 
-                        "color: violet; font-style: italic; padding: 4px; border-radius: 4px; font-size: 88px")
+            console.log(`%c안%c녕 %c난 %c프%c론%c트%c야`,
+                "color: red; font-style: italic; padding: 4px; border-radius: 4px; font-size: 88px",
+                "color: orange; font-style: italic; padding: 4px; border-radius: 4px; font-size: 88px",
+                "color: yellow; font-style: italic; padding: 4px; border-radius: 4px; font-size: 88px",
+                "color: #9BFA73; font-style: italic; padding: 4px; border-radius: 4px; font-size: 88px",
+                "color: #C0FFFF; font-style: italic; padding: 4px; border-radius: 4px; font-size: 88px",
+                "color: #0000CD; font-style: italic; padding: 4px; border-radius: 4px; font-size: 88px",
+                "color: violet; font-style: italic; padding: 4px; border-radius: 4px; font-size: 88px")
             console.log(`%c                                                                                                                                                   
 
 
@@ -68,46 +67,78 @@ Y88b  d88P Y88..88P Y88b 888 Y8b.     888 d88P 888     888 Y88b.    888 "88b
 
 
 `, "color:powderblue")
-            $(document).ready(function () {
+
+            $(document).ready(function ()
+            {
 
                 loadPost()
 
-                if ( localStorage.getItem("token") ) {
+                if (localStorage.getItem("token"))
+                {
                     userName()
                     $('#join').hide()
                     $('#login').hide()
-                } else {
+                } else
+                {
                     $('#logout').hide()
                 }
                 // if localStorage.getItem("token") ? userName() : return
                 // 죄송합니다
             })
 
-            function loadPost() {
+            function loadPost()
+            {
                 // $("#postlist").empty()
                 $.ajax({
                     type: "GET",
                     url: `/api/post`,
                     data: {},
-                    success: function (response) {
+                    success: function (response)
+                    {
                         let post = response["post"]
-                        console.log(post)
-                        for ( let i = 0; i < post.length; i++ ) {
-                                                                            // detail?postId=${post[i]['postId']}
+                        // console.log(post)
+                        for (let i = 0; i < post.length; i++)
+                        {
+                            // detail?postId=${post[i]['postId']}
                             let temp_html = `<tr onclick="window.location='detail/${post[i]["postId"]}';">
                                                 <a href="/detail"><td scope="col">${post[i]["title"]}</td></a>
                                                 <td scope="col">${post[i]["author"]}</td>
                                                 <td scope="col">${post[i]["date"]}</td>
                                             </tr>`
                             $("#postlist").append(temp_html)
+
+
                         }
                     }
                 })
             }
 
-            function makePost() {
-                window.location.href="/new"
+            function makePost()
+            {
+                window.location.href = "/new"
             }
+
+            // const clockContainer = document.querySelector("clock");
+            // const clockTitle = clockContainer.querySelector("h1");
+            function getTime()
+            {
+                const date = new Date();
+                const hours = date.getHours()
+                const minutes = date.getMinutes()
+                const seconds = date.getSeconds()
+
+                let clock = `${hours < 10 ? `0${hours}` : hours} : ${minutes < 10 ? `0${minutes}` : minutes} : ${seconds < 10 ? `0${seconds}` : seconds}`
+
+                $("#clock").append(clock)
+            }
+
+            // function init()
+            // {
+            //     getTime();
+            //     setInterval(getTime, 1000);
+            // }
+
+            // init();
 
         </script>
 
@@ -131,8 +162,9 @@ Y88b  d88P Y88..88P Y88b 888 Y8b.     888 d88P 888     888 Y88b.    888 "88b
                 text-align: center;
                 cursor: pointer;
                 transition: transform 300ms ease;
-                
+
             }
+
             .post:hover {
                 transform: scale(1.1);
             }
@@ -140,13 +172,16 @@ Y88b  d88P Y88..88P Y88b 888 Y8b.     888 d88P 888     888 Y88b.    888 "88b
             .reviews {
                 margin-top: 100px;
             }
+
             .container {
                 width: 600px;
                 text-align: center;
             }
+
             .hero-body {
                 text-align: center;
             }
+
             .join-box {
                 text-align: center;
                 /* display: inline; */
@@ -155,6 +190,9 @@ Y88b  d88P Y88..88P Y88b 888 Y8b.     888 d88P 888     888 Y88b.    888 "88b
     </head>
 
     <body>
+        <div>
+            <h1 id="clock">00:00</h1>
+        </div>
         <section class="hero is-primary">
             <div class="hero-body">
                 <p class="title">
@@ -169,32 +207,32 @@ Y88b  d88P Y88..88P Y88b 888 Y8b.     888 d88P 888     888 Y88b.    888 "88b
                 </div>
 
             </div>
-            </section>
-            <div class="join-box">
-                <div class="">
-                    <button id="join" onclick="join()" class="button is-primary">회원가입</button>
-                </div>
-                <div class="">
-                    <button id="login" onclick="login()" class="button is-primary">로그인</button>
-                </div>
-                <div class="">
-                    <button id="logout" onclick="logout()" class="button is-primary">로그아웃</button>
-                </div>
+        </section>
+        <div class="join-box">
+            <div class="">
+                <button id="join" onclick="join()" class="button is-primary">회원가입</button>
             </div>
+            <div class="">
+                <button id="login" onclick="login()" class="button is-primary">로그인</button>
+            </div>
+            <div class="">
+                <button id="logout" onclick="logout()" class="button is-primary">로그아웃</button>
+            </div>
+        </div>
 
-            <div class="post">
-                <button onclick="makePost()" class="button is-primary">글 작성하기</button>
-            </div>
+        <div class="post">
+            <button onclick="makePost()" class="button is-primary">글 작성하기</button>
+        </div>
 
         <div class="container">
             <div class="reviews">
                 <table class="table">
                     <thead>
-                    <tr>
-                        <th scope="col">제목</th>
-                        <th scope="col">작성자</th>
-                        <th scope="col">날짜</th>
-                    </tr>
+                        <tr>
+                            <th scope="col">제목</th>
+                            <th scope="col">작성자</th>
+                            <th scope="col">날짜</th>
+                        </tr>
                     </thead>
                     <tbody id="postlist">
 
